@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Fun Facts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .fact-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            line-height: 1.6;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .fact-counter {
+            color: #888;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .category-btn:hover {
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Fun Facts</h1>
+        <p class="subtitle">Click "Next Fact" to discover something amazing!</p>
+
+        <div class="category-buttons">
+            <button class="category-btn active" onclick="setCategory('all')">All</button>
+            <button class="category-btn" onclick="setCategory('science')">Science</button>
+            <button class="category-btn" onclick="setCategory('history')">History</button>
+            <button class="category-btn" onclick="setCategory('nature')">Nature</button>
+            <button class="category-btn" onclick="setCategory('tech')">Technology</button>
+        </div>
+
+        <div class="fact-box" id="factBox">
+            Click "Next Fact" to get started!
+        </div>
+
+        <div class="button-group">
+            <button onclick="getRandomFact()">📚 Next Fact</button>
+            <button onclick="copyFact()">📋 Copy Fact</button>
+        </div>
+
+        <div class="fact-counter">
+            <p id="factCount">Facts viewed: 0</p>
+        </div>
+    </div>
+
+    <script>
+        const facts = {
+            science: [
+                "Honey never spoils and can last indefinitely. Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!",
+                "A group of flamingos is called a 'flamboyance'. They are pink because of the food they eat, which contains natural pink dyes called carotenoids.",
+                "Octopuses have three hearts: two pump blood to the gills, while the third pumps blood to the rest of the body.",
+                "Bananas are berries, but strawberries aren't! Botanically speaking, berries develop from the ovary of a flowering plant.",
+                "The human brain uses 20% of the body's energy while only making up 2% of its mass, making it one of the most energy-intensive organs.",
+                "Light travels so fast that it could circle the Earth 7.5 times in just one second.",
+                "A single bolt of lightning can reach temperatures of 53,540 degrees Fahrenheit (29,726 Celsius), which is hotter than the surface of the sun!"
+            ],
+            history: [
+                "Cleopatra lived closer to the invention of the iPhone than to the construction of the Great Pyramid of Giza.",
+                "Oxford University is older than the Aztec Empire. Oxford was founded in 1096, while the Aztec Empire was established in 1428.",
+                "There was a 12-year-old samurai named Oda Kipposhi who fought in battles during Japan's Sengoku period.",
+                "The Great Wall of China isn't visible from space with the naked eye, despite the common misconception.",
+                "Napoleon was not particularly short for his time. He was about 5'7\", which was average height for men in the early 1800s.",
+                "George Washington had false teeth made from hippopotamus ivory, human teeth, and metal alloys, but not wood as commonly believed.",
+                "Vikings were the first Europeans to reach North America, about 500 years before Columbus."
+            ],
+            nature: [
+                "A group of porcupines is called a 'prickle', and a group of pugs is called a 'grumble'.",
+                "Sharks have been around for over 450 million years, making them older than dinosaurs!",
+                "The Arctic tern has the longest migration of any bird, traveling roughly 44,000 miles annually from Arctic to Antarctic and back.",
+                "Honey badgers are so tough that they're listed in the Guinness Book of World Records as the 'most fearless animal'.",
+                "A cockroach can live for a week without its head and will only die because it can't drink water.",
+                "Cows have best friends and become stressed when separated from them.",
+                "Otters hold hands while sleeping so they don't drift apart in the ocean."
+            ],
+            tech: [
+                "The first webcam was created to monitor a coffee pot at Cambridge University so researchers could check if there was coffee before walking to the break room.",
+                "The '@' symbol in email addresses is called different things around the world: 'monkey's tail' in Dutch, 'elephant's trunk' in Italian, and 'little duck' in Greek.",
+                "Wi-Fi stands for 'Wireless Fidelity', but the term was coined mostly for marketing purposes as the technology has no official full name.",
+                "The first hard disk drive, created in 1956, weighed 1 ton and could store only 5 MB of data.",
+                "It would take approximately 1.5 billion years to download the entire internet over a 56k modem connection.",
+                "QR codes were invented to track vehicles during manufacturing, but they became popular worldwide with smartphones.",
+                "The world's first computer programmer was Ada Lovelace in the 1840s, more than a century before modern computers existed."
+            ]
+        };
+
+        let currentCategory = 'all';
+        let factsViewed = 0;
+        let currentFact = '';
+
+        function setCategory(category) {
+            currentCategory = category;
+            factsViewed = 0;
+            updateCategoryButtons(category);
+            getRandomFact();
+        }
+
+        function updateCategoryButtons(active) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function getRandomFact() {
+            let factList = [];
+            
+            if (currentCategory === 'all') {
+                factList = Object.values(facts).flat();
+            } else {
+                factList = facts[currentCategory];
+            }
+
+            const randomIndex = Math.floor(Math.random() * factList.length);
+            currentFact = factList[randomIndex];
+            
+            const factBox = document.getElementById('factBox');
+            factBox.textContent = currentFact;
+            
+            factsViewed++;
+            document.getElementById('factCount').textContent = `Facts viewed: ${factsViewed}`;
+        }
+
+        function copyFact() {
+            if (currentFact) {
+                navigator.clipboard.writeText(currentFact).then(() => {
+                    alert('Fact copied to clipboard!');
+                }).catch(() => {
+                    alert('Failed to copy. Please try again.');
+                });
+            }
+        }
+
+        // Load first fact on page load
+        window.addEventListener('load', getRandomFact);
+    </script>
+</body>
+</html>
